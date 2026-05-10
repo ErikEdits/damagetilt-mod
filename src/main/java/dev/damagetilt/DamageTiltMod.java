@@ -29,23 +29,29 @@ public class DamageTiltMod implements ClientModInitializer {
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            // Erstmaliger Start Screen
             if (DamageTiltConfig.isFirstLaunch() && client.currentScreen == null && client.world != null) {
                 client.setScreen(new FirstLaunchScreen());
             }
 
+            // Keybinding Logik
             while (toggleKey.wasPressed()) {
-    boolean newState = !DamageTiltConfig.isEnabled();
-    DamageTiltConfig.setEnabled(newState);
-    DamageTiltConfig.save();
+                boolean newState = !DamageTiltConfig.isEnabled();
+                DamageTiltConfig.setEnabled(newState);
+                DamageTiltConfig.save();
 
-    client.options.getDamageTiltStrength().setValue(newState ? 1.0 : 0.0);
-    client.options.write();
+                // Vanilla Damage Tilt Option synchronisieren
+                client.options.getDamageTiltStrength().setValue(newState ? 1.0 : 0.0);
+                client.options.write();
 
-    String status = newState ? "§aAN" : "§cAUS";
-    if (client.player != null) {
-        client.player.sendMessage(
-                Text.literal("§6[DamageTilt] §rDamage Tilt: " + status),
-                true
-        );
-    }
-}
+                String status = newState ? "§aAN" : "§cAUS";
+                if (client.player != null) {
+                    client.player.sendMessage(
+                            Text.literal("§6[DamageTilt] §rDamage Tilt: " + status),
+                            true
+                    );
+                }
+            } // Ende while
+        }); // Ende register
+    } // Ende onInitializeClient
+} // Ende class
