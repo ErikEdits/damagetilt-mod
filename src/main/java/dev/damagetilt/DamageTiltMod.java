@@ -34,30 +34,18 @@ public class DamageTiltMod implements ClientModInitializer {
             }
 
             while (toggleKey.wasPressed()) {
-                boolean newState = !DamageTiltConfig.isEnabled();
-                DamageTiltConfig.setEnabled(newState);
-                DamageTiltConfig.save();
+    boolean newState = !DamageTiltConfig.isEnabled();
+    DamageTiltConfig.setEnabled(newState);
+    DamageTiltConfig.save();
 
-                // Direkt den vanilla Damage Tilt Wert setzen
-                if (newState) {
-                    client.options.damageTiltStrength().setValue(1.0f);
-                } else {
-                    client.options.damageTiltStrength().setValue(0.0f);
-                }
-                client.options.write();
+    client.options.getDamageTiltStrength().setValue(newState ? 1.0 : 0.0);
+    client.options.write();
 
-                String status = newState ? "§aAN" : "§cAUS";
-                if (client.player != null) {
-                    client.player.sendMessage(
-                            Text.literal("§6[DamageTilt] §rDamage Tilt: " + status),
-                            true
-                    );
-                }
-            }
-        });
-    }
-
-    public static KeyBinding getToggleKey() {
-        return toggleKey;
+    String status = newState ? "§aAN" : "§cAUS";
+    if (client.player != null) {
+        client.player.sendMessage(
+                Text.literal("§6[DamageTilt] §rDamage Tilt: " + status),
+                true
+        );
     }
 }
