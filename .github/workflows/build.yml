@@ -1,0 +1,44 @@
+name: Build DamageTilt Mod
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Code herunterladen
+        uses: actions/checkout@v4
+
+      - name: ☕ Java 21 einrichten
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: 🔧 Gradle Wrapper ausführbar machen
+        run: chmod +x ./gradlew
+
+      - name: 📦 Gradle Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      - name: 🔨 Mod bauen
+        run: ./gradlew build --no-daemon
+
+      - name: 📤 JAR hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: damagetilt-mod
+          path: build/libs/damagetilt-*.jar
+          if-no-files-found: error
