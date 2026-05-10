@@ -22,7 +22,7 @@ jobs:
       - name: 🔧 Gradle einrichten
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: '8.8'
+          gradle-version: '8.11'
 
       - name: 🔨 Mod bauen
         run: gradle build --no-daemon
