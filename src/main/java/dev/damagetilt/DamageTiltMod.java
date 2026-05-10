@@ -7,7 +7,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,13 +14,11 @@ public class DamageTiltMod implements ClientModInitializer {
 
     public static final String MOD_ID = "damagetilt";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
     private static KeyBinding toggleKey;
 
     @Override
     public void onInitializeClient() {
         LOGGER.info("DamageTilt Mod geladen!");
-
         DamageTiltConfig.load();
 
         toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -37,10 +34,19 @@ public class DamageTiltMod implements ClientModInitializer {
             }
 
             while (toggleKey.wasPressed()) {
-                DamageTiltConfig.setEnabled(!DamageTiltConfig.isEnabled());
+                boolean newState = !DamageTiltConfig.isEnabled();
+                DamageTiltConfig.setEnabled(newState);
                 DamageTiltConfig.save();
 
-                String status = DamageTiltConfig.isEnabled() ? "§aAN" : "§cAUS";
+                // Direkt den vanilla Damage Tilt Wert setzen
+                if (newState) {
+                    client.options.damageTiltStrength().setValue(1.0f);
+                } else {
+                    client.options.damageTiltStrength().setValue(0.0f);
+                }
+                client.options.write();
+
+                String status = newState ? "§aAN" : "§cAUS";
                 if (client.player != null) {
                     client.player.sendMessage(
                             Text.literal("§6[DamageTilt] §rDamage Tilt: " + status),
