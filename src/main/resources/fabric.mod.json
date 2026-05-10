@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "damagetilt",
+  "version": "${version}",
+  "name": "DamageTilt",
+  "description": "Toggle damage tilt effect with a configurable hotkey.",
+  "authors": ["DamageTilt"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.damagetilt.DamageTiltMod"
+    ]
+  },
+  "mixins": [
+    "damagetilt.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": "~1.21.4",
+    "java": ">=21"
+  }
+}
