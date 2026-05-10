@@ -3,8 +3,6 @@ name: Build DamageTilt Mod
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -21,20 +19,13 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: 🔧 Gradle Wrapper ausführbar machen
-        run: chmod +x ./gradlew
-
-      - name: 📦 Gradle Cache
-        uses: actions/cache@v4
+      - name: 🔧 Gradle einrichten
+        uses: gradle/actions/setup-gradle@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: gradle-
+          gradle-version: '8.8'
 
       - name: 🔨 Mod bauen
-        run: ./gradlew build --no-daemon
+        run: gradle build --no-daemon
 
       - name: 📤 JAR hochladen
         uses: actions/upload-artifact@v4
