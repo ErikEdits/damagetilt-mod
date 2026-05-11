@@ -13,21 +13,21 @@ public class FirstLaunchScreen extends Screen {
     private String keyName = InputUtil.fromKeyCode(selectedKey, 0).getLocalizedText().getString();
 
     public FirstLaunchScreen() {
-        super(Text.literal("DamageTilt — Hotkey einrichten"));
+        super(Text.literal("DamageTilt — Set Hotkey"));
     }
 
     @Override
     protected void init() {
         addDrawableChild(ButtonWidget.builder(
-                Text.literal("Taste drücken zum Festlegen"),
+                Text.literal("Press a key to set hotkey"),
                 btn -> {
                     waitingForKey = true;
-                    btn.setMessage(Text.literal("§eDrücke jetzt eine Taste..."));
+                    btn.setMessage(Text.literal("§ePress any key now..."));
                 }
         ).dimensions(this.width / 2 - 100, this.height / 2 + 10, 200, 20).build());
 
         addDrawableChild(ButtonWidget.builder(
-                Text.literal("Bestätigen & Starten"),
+                Text.literal("Confirm & Start"),
                 btn -> confirm()
         ).dimensions(this.width / 2 - 100, this.height / 2 + 40, 200, 20).build());
     }
@@ -63,16 +63,16 @@ public class FirstLaunchScreen extends Screen {
                 this.width / 2, this.height / 2 - 60, 0xFFFFFF);
 
         context.drawCenteredTextWithShadow(this.textRenderer,
-                Text.literal("Wähle einen Hotkey zum An-/Ausschalten des Damage Tilt Effekts."),
+                Text.literal("Choose a hotkey to toggle the Damage Tilt effect."),
                 this.width / 2, this.height / 2 - 40, 0xAAAAAA);
 
-        String display = waitingForKey ? "§eDrücke eine Taste..." : "§aAktueller Hotkey: §f" + keyName;
+        String display = waitingForKey ? "§ePress any key..." : "§aCurrent Hotkey: §f" + keyName;
         context.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal(display),
                 this.width / 2, this.height / 2 - 15, 0xFFFFFF);
 
         context.drawCenteredTextWithShadow(this.textRenderer,
-                Text.literal("§7Du kannst den Hotkey jederzeit in Options → Controls ändern."),
+                Text.literal("§7You can change the hotkey anytime in Options → Controls."),
                 this.width / 2, this.height / 2 + 70, 0x888888);
     }
 
