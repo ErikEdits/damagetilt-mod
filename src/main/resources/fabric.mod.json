@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "DamageTilt",
   "description": "Toggle damage tilt effect with a configurable hotkey.",
-  "authors": ["DamageTilt"],
+  "authors": ["ErikEdits"],
   "contact": {},
   "license": "MIT",
   "environment": "client",
