@@ -15,6 +15,7 @@ public class DamageTiltMod implements ClientModInitializer {
     public static final String MOD_ID = "damagetilt";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     private static KeyBinding toggleKey;
+    private static boolean initialStateApplied = false;
 
     @Override
     public void onInitializeClient() {
@@ -29,6 +30,12 @@ public class DamageTiltMod implements ClientModInitializer {
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (!initialStateApplied && client.options != null) {
+                ((GameOptionsAccessor) client.options).getDamageTiltStrength()
+                        .setValue(DamageTiltConfig.isEnabled() ? 1.0 : 0.0);
+                initialStateApplied = true;
+            }
+
             if (DamageTiltConfig.isFirstLaunch() && client.currentScreen == null && client.world != null) {
                 client.setScreen(new FirstLaunchScreen());
             }

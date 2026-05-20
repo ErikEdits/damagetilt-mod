@@ -3,6 +3,7 @@ package dev.damagetilt;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 
@@ -51,6 +52,8 @@ public class FirstLaunchScreen extends Screen {
         DamageTiltConfig.setKeyCode(selectedKey);
         DamageTiltConfig.setFirstLaunch(false);
         DamageTiltConfig.save();
+        DamageTiltMod.getToggleKey().setBoundKey(InputUtil.fromKeyCode(selectedKey, 0));
+        KeyBinding.updateKeysByCode();
         this.close();
     }
 
