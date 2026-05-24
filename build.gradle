@@ -63,7 +63,7 @@ if (mcMajor == 18) {
 sourceSets {
     main {
         java      { srcDirs = ['src/main/java', "src/${sourceVariant}/java"] }
-        resources { srcDirs = ["src/${sourceVariant}/resources"] }
+        resources { srcDirs = ['src/main/resources', "src/${sourceVariant}/resources"] }
     }
 }
 

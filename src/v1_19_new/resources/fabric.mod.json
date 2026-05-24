@@ -7,6 +7,7 @@
   "authors": ["ErikEdits"],
   "contact": {},
   "license": "MIT",
+  "icon": "assets/damagetilt/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -21,5 +22,8 @@
     "fabric-api": "*",
     "minecraft": "~${mcVersion}",
     "java": ">=${minJava}"
+  },
+  "suggests": {
+    "modmenu": "*"
   }
 }
