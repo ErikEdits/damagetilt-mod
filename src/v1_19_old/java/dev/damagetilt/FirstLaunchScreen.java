@@ -7,7 +7,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-// 1.19.x – MatrixStack-based rendering, old ButtonWidget constructor (no builder)
+// 1.19 / 1.19.1 / 1.19.2 – old ButtonWidget constructor; drawCenteredTextWithShadow needs OrderedText
 public class FirstLaunchScreen extends Screen {
 
     private boolean waitingForKey = false;
@@ -66,20 +66,20 @@ public class FirstLaunchScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
 
         drawCenteredTextWithShadow(matrices, this.textRenderer,
-                Text.literal("§6§lDamageTilt Mod"),
+                Text.literal("§6§lDamageTilt Mod").asOrderedText(),
                 this.width / 2, this.height / 2 - 60, 0xFFFFFF);
 
         drawCenteredTextWithShadow(matrices, this.textRenderer,
-                Text.literal("Choose a hotkey to toggle the Damage Tilt effect."),
+                Text.literal("Choose a hotkey to toggle the Damage Tilt effect.").asOrderedText(),
                 this.width / 2, this.height / 2 - 40, 0xAAAAAA);
 
         String display = waitingForKey ? "§ePress any key..." : "§aCurrent Hotkey: §f" + keyName;
         drawCenteredTextWithShadow(matrices, this.textRenderer,
-                Text.literal(display),
+                Text.literal(display).asOrderedText(),
                 this.width / 2, this.height / 2 - 15, 0xFFFFFF);
 
         drawCenteredTextWithShadow(matrices, this.textRenderer,
-                Text.literal("§7You can change the hotkey anytime in Options → Controls."),
+                Text.literal("§7You can change the hotkey anytime in Options → Controls.").asOrderedText(),
                 this.width / 2, this.height / 2 + 70, 0x888888);
     }
 
