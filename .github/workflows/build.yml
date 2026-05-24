@@ -114,11 +114,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.14'
+          cache-disabled: true
 
       - name: 🔨 Build mod (${{ matrix.mc }})
         run: |
           sed -i "s/id 'fabric-loom' version '.*'/id 'fabric-loom' version '${{ matrix.loom }}'/" build.gradle
-          gradle remapJar --no-daemon
+          gradle remapJar --no-daemon --no-build-cache
         env:
           MC_VERSION: ${{ matrix.mc }}
           YARN_VERSION: ${{ matrix.yarn }}
@@ -133,32 +134,4 @@ jobs:
             build/libs/*.jar
             !build/libs/*-dev.jar
             !build/libs/*-sources.jar
-          if-no-files-found: error
-
-  # ── Bundle all JARs into one ZIP ──────────────────────────────────────────
-  bundle:
-    name: Bundle all versions into ZIP
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📦 Download all JAR artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: jars/
-
-      - name: 🗜️ Create damagetilt-all-versions.zip
-        run: |
-          mkdir -p bundle
-          find jars/ -name "*.jar" | while read f; do
-            mc=$(basename $(dirname "$f"))
-            cp "$f" "bundle/damagetilt-${mc#damagetilt-}.jar"
-          done
-          ls -lh bundle/
-          zip -j damagetilt-all-versions.zip bundle/*.jar
-
-      - name: 📤 Upload ZIP
-        uses: actions/upload-artifact@v4
-        with:
-          name: damagetilt-all-versions
-          path: damagetilt-all-versions.zip
           if-no-files-found: error
