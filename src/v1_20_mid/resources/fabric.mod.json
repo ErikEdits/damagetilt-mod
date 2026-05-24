@@ -17,9 +17,9 @@
     "damagetilt.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.0",
+    "fabricloader": ">=0.14.0",
     "fabric-api": "*",
-    "minecraft": "~1.21.4",
-    "java": ">=21"
+    "minecraft": "~${mcVersion}",
+    "java": ">=${minJava}"
   }
 }

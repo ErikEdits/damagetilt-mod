@@ -3,33 +3,76 @@ plugins {
     id 'maven-publish'
 }
 
-version = System.getenv('MOD_VERSION') ?: '1.0.0'
-group = 'dev.damagetilt'
+// ── Version resolution ──────────────────────────────────────────────────────
+def mcVersion   = System.getenv('MC_VERSION')   ?: '1.21.4'
+def yarnVersion = System.getenv('YARN_VERSION') ?: '1.21.4+build.1'
+def fabricApi   = System.getenv('FABRIC_API')   ?: '0.119.2+1.21.4'
 
-base {
-    archivesName = 'damagetilt'
+version = System.getenv('MOD_VERSION') ?: '1.0.0'
+group   = 'dev.damagetilt'
+
+base { archivesName = 'damagetilt' }
+
+// ── Source variant & Java version ────────────────────────────────────────────
+def mcParts = mcVersion.split('\\.')
+def mcMajor = Integer.parseInt(mcParts[1])
+def mcMinor = mcParts.length > 2 ? Integer.parseInt(mcParts[2]) : 0
+
+String sourceVariant
+JavaVersion targetJava
+int minJava
+
+if (mcMajor == 20 && mcMinor <= 1) {
+    // 1.20, 1.20.1 – old Screen/MatrixStack API, no damageTiltStrength
+    sourceVariant = 'v1_20_old'
+    targetJava    = JavaVersion.VERSION_17
+    minJava       = 17
+} else if (mcMajor == 20 && mcMinor <= 4) {
+    // 1.20.2–1.20.4 – DrawContext API, no damageTiltStrength
+    sourceVariant = 'v1_20_mid'
+    targetJava    = JavaVersion.VERSION_17
+    minJava       = 17
+} else {
+    // 1.20.5+ / 1.21.x – damageTiltStrength slider available
+    sourceVariant = 'v1_20_new'
+    targetJava    = JavaVersion.VERSION_21
+    minJava       = 21
 }
 
+// ── Source sets ──────────────────────────────────────────────────────────────
+sourceSets {
+    main {
+        java      { srcDirs = ['src/main/java', "src/${sourceVariant}/java"] }
+        resources { srcDirs = ["src/${sourceVariant}/resources"] }
+    }
+}
+
+// ── Repositories ─────────────────────────────────────────────────────────────
 repositories {
     maven { url 'https://maven.fabricmc.net/' }
 }
 
+// ── Dependencies ─────────────────────────────────────────────────────────────
 dependencies {
-    minecraft "com.mojang:minecraft:${System.getenv('MC_VERSION') ?: '1.21.4'}"
-    mappings "net.fabricmc:yarn:${System.getenv('YARN_VERSION') ?: '1.21.4+build.1'}:v2"
+    minecraft         "com.mojang:minecraft:${mcVersion}"
+    mappings          "net.fabricmc:yarn:${yarnVersion}:v2"
     modImplementation 'net.fabricmc:fabric-loader:0.16.9'
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${System.getenv('FABRIC_API') ?: '0.119.2+1.21.4'}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApi}"
 }
 
+// ── Resource filtering ───────────────────────────────────────────────────────
 processResources {
-    inputs.property 'version', project.version
+    inputs.property 'version',   project.version
+    inputs.property 'mcVersion', mcVersion
+    inputs.property 'minJava',   minJava
     filteringCharset 'UTF-8'
     filesMatching('fabric.mod.json') {
-        expand 'version': project.version
+        expand version: project.version, mcVersion: mcVersion, minJava: minJava
     }
 }
 
+// ── Java target ──────────────────────────────────────────────────────────────
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = targetJava
+    targetCompatibility = targetJava
 }
