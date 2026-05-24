@@ -6,9 +6,8 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.BlockView;
+import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,18 +15,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * After Camera.update() computes the base yaw/pitch orientation, this mixin
- * appends a directional roll (Z-axis rotation) proportional to the player's
- * hurtTime and scaled by sin(relativeAttackAngle), replicating the behaviour
- * that Mojang fixed natively in 1.19.4.
- *
- * DamageTiltHandlerMixin suppresses the vanilla always-rightward tilt in
- * GameRenderer so only our corrected version plays.
+ * 1.19.3 – MC switched from net.minecraft.util.math.Quaternion/Vec3f to JOML
+ * (org.joml.Quaternionf) in this version.  Same directional-tilt logic as
+ * v1_19_old but uses JOML's rotateLocalZ instead of hamiltonProduct.
  */
 @Mixin(Camera.class)
 public abstract class CameraDirectionalTiltMixin {
 
-    @Shadow private Quaternion rotation;
+    @Shadow private Quaternionf rotation;
 
     @Inject(method = "update", at = @At("RETURN"), require = 0)
     private void applyDirectionalHurtTilt(BlockView area, Entity focusedEntity,
@@ -39,14 +34,10 @@ public abstract class CameraDirectionalTiltMixin {
         float h = (float) entity.hurtTime - tickDelta;
         if (h <= 0.0f) return;
 
-        // Same magnitude formula as vanilla
-        float magnitude = MathHelper.sin(h / (float) entity.maxHurtTime * h * MathHelper.PI) * 14.0f;
+        float magnitude = MathHelper.sin(h / (float) entity.maxHurtTime * h * (float) Math.PI) * 14.0f;
+        float tiltDeg   = magnitude * MathHelper.sin(DamageTiltMod.lastDamageAngle);
 
-        // sin(relativeAngle): +1 = attacker is fully to the left  → tilt left
-        //                     -1 = attacker is fully to the right → tilt right
-        float tiltAngle = magnitude * MathHelper.sin(DamageTiltMod.lastDamageAngle);
-
-        // Multiply camera rotation by a local-frame Z roll (hamiltonProduct applies in local space)
-        rotation.hamiltonProduct(Vec3f.POSITIVE_Z.getDegreesQuaternion(tiltAngle));
+        // JOML: rotateLocalZ applies the rotation in the camera's own local frame
+        rotation.rotateLocalZ((float) Math.toRadians(tiltDeg));
     }
 }

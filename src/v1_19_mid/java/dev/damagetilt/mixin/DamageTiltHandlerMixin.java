@@ -7,12 +7,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import dev.damagetilt.DamageTiltConfig;
-
 /**
- * 1.19.4 – Mojang fixed the directional damage tilt natively in this version.
- * We only need to toggle it: return the real hurtTime when enabled so vanilla
- * plays the correct directional tilt, or 0 when disabled to suppress it.
+ * Suppresses the vanilla broken-direction hurt tilt in GameRenderer.
+ * CameraDirectionalTiltMixin applies a properly-directional tilt instead.
+ * (1.19.3 has the same broken tilt as 1.19–1.19.2; 1.19.4 has it natively
+ * fixed, but suppressing here + re-applying in Camera is equivalent and safe.)
  */
 @Mixin(GameRenderer.class)
 public abstract class DamageTiltHandlerMixin {
@@ -26,7 +25,7 @@ public abstract class DamageTiltHandlerMixin {
         ),
         require = 0
     )
-    private int toggleNativeDirectionalTilt(LivingEntity entity) {
-        return DamageTiltConfig.isEnabled() ? entity.hurtTime : 0;
+    private int suppressVanillaBrokenTilt(LivingEntity entity) {
+        return 0;
     }
 }

@@ -15,6 +15,9 @@ public class DamageTiltMod implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     private static KeyBinding toggleKey;
 
+    /** Angle in radians from player to last attacker, relative to player's facing direction. */
+    public static float lastDamageAngle = 0.0f;
+
     @Override
     public void onInitializeClient() {
         LOGGER.info("DamageTilt Mod loaded!");

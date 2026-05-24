@@ -27,8 +27,13 @@ if (mcMajor == 19 && mcMinor <= 2) {
     sourceVariant = 'v1_19_old'
     targetJava    = JavaVersion.VERSION_17
     minJava       = 17
+} else if (mcMajor == 19 && mcMinor == 3) {
+    // 1.19.3 – ButtonWidget builder; JOML math classes; directional tilt via Camera mixin
+    sourceVariant = 'v1_19_mid'
+    targetJava    = JavaVersion.VERSION_17
+    minJava       = 17
 } else if (mcMajor == 19) {
-    // 1.19.3 / 1.19.4 – ButtonWidget builder, OrderedText for centered draw
+    // 1.19.4 – ButtonWidget builder; JOML; Mojang fixed directional tilt natively → just toggle
     sourceVariant = 'v1_19_new'
     targetJava    = JavaVersion.VERSION_17
     minJava       = 17
