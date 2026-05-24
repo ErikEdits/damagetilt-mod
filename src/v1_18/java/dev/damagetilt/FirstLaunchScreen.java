@@ -58,7 +58,7 @@ public class FirstLaunchScreen extends Screen {
         DamageTiltConfig.save();
         DamageTiltMod.getToggleKey().setBoundKey(InputUtil.fromKeyCode(selectedKey, 0));
         KeyBinding.updateKeysByCode();
-        this.close();
+        this.client.setScreen(null); // Screen.close() not available before 1.18.2
     }
 
     @Override
