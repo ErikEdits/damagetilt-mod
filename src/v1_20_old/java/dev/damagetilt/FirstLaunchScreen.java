@@ -1,14 +1,13 @@
 package dev.damagetilt;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
-// 1.20 / 1.20.1 – uses MatrixStack-based render API (pre-DrawContext)
+// 1.20 / 1.20.1 – DrawContext was already introduced in 1.20
 public class FirstLaunchScreen extends Screen {
 
     private boolean waitingForKey = false;
@@ -38,7 +37,7 @@ public class FirstLaunchScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (waitingForKey) {
-            if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            if (keyCode == InputUtil.GLFW_KEY_ESCAPE) {
                 waitingForKey = false;
                 return true;
             }
@@ -60,24 +59,23 @@ public class FirstLaunchScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
 
-        drawCenteredTextWithShadow(matrices, this.textRenderer,
+        context.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal("§6§lDamageTilt Mod"),
                 this.width / 2, this.height / 2 - 60, 0xFFFFFF);
 
-        drawCenteredTextWithShadow(matrices, this.textRenderer,
+        context.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal("Choose a hotkey to toggle the Damage Tilt effect."),
                 this.width / 2, this.height / 2 - 40, 0xAAAAAA);
 
         String display = waitingForKey ? "§ePress any key..." : "§aCurrent Hotkey: §f" + keyName;
-        drawCenteredTextWithShadow(matrices, this.textRenderer,
+        context.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal(display),
                 this.width / 2, this.height / 2 - 15, 0xFFFFFF);
 
-        drawCenteredTextWithShadow(matrices, this.textRenderer,
+        context.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal("§7You can change the hotkey anytime in Options → Controls."),
                 this.width / 2, this.height / 2 + 70, 0x888888);
     }
