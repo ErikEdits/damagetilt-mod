@@ -22,7 +22,7 @@ jobs:
           - mc: "1.20.1"
             yarn: "1.20.1+build.10"
             fabric_api: "0.92.9+1.20.1"
-            loom: "1.4.6"
+            loom: "1.9-SNAPSHOT"
             java: "17"
             mod_version: "1.0.0-1.20.1"
           - mc: "1.20.2"
@@ -40,7 +40,7 @@ jobs:
           - mc: "1.20.4"
             yarn: "1.20.4+build.3"
             fabric_api: "0.97.3+1.20.4"
-            loom: "1.5.8"
+            loom: "1.9-SNAPSHOT"
             java: "17"
             mod_version: "1.0.0-1.20.4"
           # ── 1.20.5-1.20.6 (Java 21, damageTiltStrength available) ────────────
