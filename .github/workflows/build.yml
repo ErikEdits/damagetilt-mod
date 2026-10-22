@@ -113,7 +113,7 @@ jobs:
 
       - name: 🔨 Build mod (${{ matrix.mc }})
         run: |
-          sed -i "s/id 'fabric-loom' version '.*'/id 'fabric-loom' version '${{ matrix.loom }}'/" build.gradle
+          sed -i "s/id '[a-z.]*fabric-loom' version '.*'/id 'net.fabricmc.fabric-loom' version '${{ matrix.loom }}'/" build.gradle
           gradle build --no-daemon --no-build-cache
         env:
           MC_VERSION: ${{ matrix.mc }}

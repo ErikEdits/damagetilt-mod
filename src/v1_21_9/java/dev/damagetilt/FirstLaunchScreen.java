@@ -13,7 +13,7 @@ public class FirstLaunchScreen extends Screen {
 
     private boolean waitingForKey = false;
     private int selectedKey = DamageTiltConfig.getKeyCode();
-    private String keyName = InputUtil.fromKeyCode(selectedKey, 0).getLocalizedText().getString();
+    private String keyName = InputUtil.fromKeyCode(new KeyInput(selectedKey, 0, 0)).getLocalizedText().getString();
 
     public FirstLaunchScreen() {
         super(Text.literal("DamageTilt — Set Hotkey"));
@@ -43,7 +43,7 @@ public class FirstLaunchScreen extends Screen {
                 return true;
             }
             selectedKey = input.key();
-            keyName = InputUtil.fromKeyCode(input.key(), input.scancode()).getLocalizedText().getString();
+            keyName = InputUtil.fromKeyCode(input).getLocalizedText().getString();
             waitingForKey = false;
             return true;
         }
@@ -54,7 +54,7 @@ public class FirstLaunchScreen extends Screen {
         DamageTiltConfig.setKeyCode(selectedKey);
         DamageTiltConfig.setFirstLaunch(false);
         DamageTiltConfig.save();
-        DamageTiltMod.getToggleKey().setBoundKey(InputUtil.fromKeyCode(selectedKey, 0));
+        DamageTiltMod.getToggleKey().setBoundKey(InputUtil.fromKeyCode(new KeyInput(selectedKey, 0, 0)));
         KeyBinding.updateKeysByCode();
         this.close();
     }
