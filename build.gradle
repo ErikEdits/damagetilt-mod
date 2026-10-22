@@ -28,8 +28,10 @@ JavaVersion targetJava
 int minJava
 
 if (unobfuscated) {
-    // 26.x – unobfuscated Mojang names, GuiGraphicsExtractor rendering, KeyMappingHelper
-    sourceVariant = 'v26'
+    // 26.x – unobfuscated Mojang names, GuiGraphicsExtractor rendering, KeyMappingHelper.
+    // The API moved between releases: 26.1 (client.setScreen), 26.2 (client.gui.setScreen),
+    // 26.3 (InputConstants.Type.KEYBOARD, no LWJGL on the compile classpath).
+    sourceVariant = mcMajor == 1 ? 'v26_1' : (mcMajor == 2 ? 'v26_2' : 'v26_3')
     targetJava    = JavaVersion.VERSION_25
     minJava       = 25
 } else if (mcMajor == 18) {

@@ -3,7 +3,6 @@ package dev.damagetilt;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import org.lwjgl.glfw.GLFW;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +18,7 @@ public class DamageTiltConfig {
 
     public static class ConfigData {
         public boolean enabled = true;
-        public int keyCode = GLFW.GLFW_KEY_K;
+        public int keyCode = 75; // GLFW_KEY_K
         public boolean firstLaunch = true;
     }
 
