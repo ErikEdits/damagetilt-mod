@@ -30,7 +30,7 @@ public class DamageTiltConfig {
                 data = GSON.fromJson(json, ConfigData.class);
                 if (data == null) data = new ConfigData();
             } catch (IOException e) {
-                DamageTiltMod.LOGGER.error("Fehler beim Laden der Config: " + e.getMessage());
+                DamageTiltMod.LOGGER.error("Failed to load config: " + e.getMessage());
                 data = new ConfigData();
             }
         } else {
@@ -43,7 +43,7 @@ public class DamageTiltConfig {
         try {
             Files.writeString(CONFIG_PATH, GSON.toJson(data));
         } catch (IOException e) {
-            DamageTiltMod.LOGGER.error("Fehler beim Speichern der Config: " + e.getMessage());
+            DamageTiltMod.LOGGER.error("Failed to save config: " + e.getMessage());
         }
     }
 
