@@ -50,9 +50,9 @@ public class DamageTiltMod implements ClientModInitializer {
                 client.options.save();
 
                 if (client.player != null) {
-                    client.player.displayClientMessage(
+                    client.gui.setOverlayMessage(
                             Component.literal("[DamageTilt] Damage Tilt: " + (newState ? "ON" : "OFF")),
-                            true
+                            false
                     );
                 }
             }

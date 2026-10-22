@@ -14,7 +14,7 @@ public class FirstLaunchScreen extends Screen {
 
     private boolean waitingForKey = false;
     private int selectedKey = DamageTiltConfig.getKeyCode();
-    private String keyName = InputConstants.getKey(selectedKey, 0).getDisplayName().getString();
+    private String keyName = InputConstants.Type.KEYSYM.getOrCreate(selectedKey).getDisplayName().getString();
 
     public FirstLaunchScreen() {
         super(Component.literal("DamageTilt — Set Hotkey"));
@@ -44,7 +44,7 @@ public class FirstLaunchScreen extends Screen {
                 return true;
             }
             selectedKey = event.key();
-            keyName = InputConstants.getKey(event.key(), event.scancode()).getDisplayName().getString();
+            keyName = InputConstants.Type.KEYSYM.getOrCreate(event.key()).getDisplayName().getString();
             waitingForKey = false;
             return true;
         }
@@ -55,7 +55,7 @@ public class FirstLaunchScreen extends Screen {
         DamageTiltConfig.setKeyCode(selectedKey);
         DamageTiltConfig.setFirstLaunch(false);
         DamageTiltConfig.save();
-        DamageTiltMod.getToggleKey().setKey(InputConstants.getKey(selectedKey, 0));
+        DamageTiltMod.getToggleKey().setKey(InputConstants.Type.KEYSYM.getOrCreate(selectedKey));
         KeyMapping.resetMapping();
         this.onClose();
     }
